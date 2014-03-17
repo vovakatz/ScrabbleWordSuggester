@@ -5,3 +5,4 @@ D:\Playground\ScrabbleWordSuggester\ScrabbleWordSuggester\obj\Debug\ScrabbleWord
 D:\Playground\ScrabbleWordSuggester\ScrabbleWordSuggester\obj\Debug\ScrabbleWordSuggester.exe
 D:\Playground\ScrabbleWordSuggester\ScrabbleWordSuggester\obj\Debug\ScrabbleWordSuggester.pdb
 D:\Playground\ScrabbleWordSuggester\ScrabbleWordSuggester\bin\Debug\Source\word_list_moby_crossword.flat.txt
+D:\Playground\ScrabbleWordSuggester\ScrabbleWordSuggester\bin\Debug\Indexes\placeholder.txt
