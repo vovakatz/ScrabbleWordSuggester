@@ -9,12 +9,33 @@ namespace ScrabbleWordSuggester
 {
     public class Indexer
     {
-        List<RankWordPair> _tempList = new List<RankWordPair>(); 
+        List<RankWordPair> _tempList = new List<RankWordPair>();
+        string _sourceFilePath;
+        public List<string> Errors{ get; set; }
+
+        public Indexer()
+        {
+            _sourceFilePath = Environment.CurrentDirectory + "\\Source\\word_list_moby_crossword.flat.txt";
+            Errors = new List<string>();
+        }
+
+        public Indexer(string sourceFilePath)
+        {
+            _sourceFilePath = sourceFilePath;
+            Errors = new List<string>();
+        }
+
+        public bool ValidateInput()
+        {
+            if (!File.Exists(_sourceFilePath))
+                Errors.Add("specified file does not exist");
+            return Errors.Count > 0 ? false : true;
+        }
 
         public void CreateIndex()
         {
-            StreamReader file = new StreamReader(Environment.CurrentDirectory + "\\Source\\word_list_moby_crossword.flat.txt");
             Console.WriteLine("starting indexing");
+            StreamReader file = new StreamReader(_sourceFilePath);
 
             string word;
             while ((word = file.ReadLine()) != null)
@@ -26,8 +47,6 @@ namespace ScrabbleWordSuggester
             Console.WriteLine("finished indexing");
 
             file.Close();
-            // Suspend the screen.
-            Console.ReadLine();
         }
 
         private int CalculateRank(string word)
@@ -88,17 +107,18 @@ namespace ScrabbleWordSuggester
         {
             _tempList = _tempList.OrderByDescending(w => w.Rank).ToList();
 
-            for (char c = 'a'; c <= 'z'; ++c)
+            string[] letters = "a b c d e f g h i j k l m n o p q r s t u v w x y z".Split(' ');
+            Parallel.ForEach(letters, currentLetter =>
             {
-                var stringList = string.Join("\n", _tempList.Where(p => p.Word.Contains(c)).Select(w => w.ToString()));
-                string filePath = Environment.CurrentDirectory + "\\indexes\\" + c + ".txt";
+                var stringList = string.Join("\n", _tempList.Where(p => p.Word.Contains(currentLetter)).Select(w => w.ToString()));
+                string filePath = Environment.CurrentDirectory + "\\indexes\\" + currentLetter + ".txt";
                 if (File.Exists(filePath))
                     File.Delete(filePath);
                 using (StreamWriter sw = File.AppendText(filePath))
                 {
                     sw.WriteLine(stringList);
                 }
-            }
+            });
         }
     }
 }
